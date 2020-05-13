@@ -1,8 +1,9 @@
 module Fretboard exposing (..)
 
 
-
 import Html.Styled exposing (..)
+import Music exposing (Note)
+
 
 
 type Msg
@@ -10,7 +11,8 @@ type Msg
 
 
 type alias Model =
-    {}
+    { notes : Note
+    }
 
 
 view : Model -> Html Msg
