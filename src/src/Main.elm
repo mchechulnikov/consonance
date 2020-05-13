@@ -3,6 +3,7 @@ port module Main exposing (..)
 import Fretboard
 import Browser
 import Browser.Navigation exposing (Key)
+import Guitar
 import Html exposing (..)
 import Html.Styled
 import Url exposing (Url)
@@ -33,14 +34,20 @@ main =
 
 
 document model =
-    { title = "Resolvent"
+    { title = "Consonance | Guitar fretboard assistant"
     , body = [ view model ]
     }
 
 
 init : () -> Url -> Key -> (Model, Cmd msg)
 init _ _ _ =
-    ( BoardDesigner {}
+    ( FretboardModel
+        { guitar =
+            { tuning = Guitar.standardTuning
+            , fretsNumber = 22
+            }
+        , selectedFretPoints = []
+        }
     , Cmd.none
     )
 
@@ -50,7 +57,7 @@ init _ _ _ =
 
 
 type Model
-    = BoardDesigner Fretboard.Model
+    = FretboardModel Fretboard.Model
 
 
 
@@ -100,11 +107,10 @@ view model =
     let
         fretboard m =
             case m of
-                BoardDesigner designerModel ->
+                FretboardModel designerModel ->
                     Fretboard.view designerModel
                         |> Html.Styled.toUnstyled
                         |> Html.map (FretboardMsg designerModel)
-
     in
     div
         []

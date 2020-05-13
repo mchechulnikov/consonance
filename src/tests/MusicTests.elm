@@ -1,7 +1,7 @@
 module MusicTests exposing (..)
 
 import Expect exposing (Expectation)
-import Music exposing (Accidental(..), Base(..), Note(..), Octave(..), noteToString)
+import Note exposing (Accidental(..), Base(..), Note(..), Octave(..), toString)
 import Test exposing (..)
 
 
@@ -9,7 +9,7 @@ noteToStringTests : Test
 noteToStringTests =
     let
         testNote str val =
-            test str (\_ -> Expect.equal str (noteToString val))
+            test str (\_ -> Expect.equal str (toString val))
     in
     describe "note to string"
         [ testNote "A0" (Note A Nothing SubContra)
