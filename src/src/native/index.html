@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resolvent</title>
+    <link rel="stylesheet" type="text/css" href="reset.css">
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src="index.js"></script>
+    <script src="ports.js"></script>
+</head>
+<body>
+    <div id="appContainer"></div>
+    <script>
+        window.onload = () => {
+            const app = Elm.Main.init({ node: document.getElementById('appContainer')});
+
+            initPorts(app);
+        };
+    </script>
+</body>
+</html>
