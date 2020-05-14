@@ -3,7 +3,8 @@ port module Main exposing (..)
 import Fretboard
 import Browser
 import Browser.Navigation exposing (Key)
-import Guitar
+import Guitar exposing (GuitarFret(..), GuitarString(..), guitarString, standardTuning)
+import Note exposing (..)
 import Html exposing (..)
 import Html.Styled
 import Url exposing (Url)
@@ -46,7 +47,13 @@ init _ _ _ =
             { tuning = Guitar.standardTuning
             , fretsNumber = 22
             }
-        , selectedFretPoints = []
+        , selectedFretPoints =
+            [ { string = GuitarString 1, fret = GuitarFret 0 }
+            , { string = GuitarString 2, fret = GuitarFret 1 }
+            , { string = GuitarString 3, fret = GuitarFret 2 }
+            , { string = GuitarString 4, fret = GuitarFret 2 }
+            , { string = GuitarString 5, fret = GuitarFret 0 }
+            ]
         }
     , Cmd.none
     )

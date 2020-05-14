@@ -6,12 +6,12 @@ import Note exposing (Base(..), Note, Octave(..))
 
 standardTuning
     = SixStringTuning
-        { base = E, accidental = Nothing, octave = OneLined}
-        { base = B, accidental = Nothing, octave = Small}
-        { base = G, accidental = Nothing, octave = Small}
-        { base = D, accidental = Nothing, octave = Small}
-        { base = A, accidental = Nothing, octave = Great}
-        { base = E, accidental = Nothing, octave = Great}
+        { base = E, accidental = Nothing, octave = OneLinedOctave }
+        { base = B, accidental = Nothing, octave = SmallOctave }
+        { base = G, accidental = Nothing, octave = SmallOctave }
+        { base = D, accidental = Nothing, octave = SmallOctave }
+        { base = A, accidental = Nothing, octave = GreatOctave }
+        { base = E, accidental = Nothing, octave = GreatOctave }
 
 
 

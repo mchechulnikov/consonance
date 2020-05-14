@@ -17,16 +17,16 @@ type Accidental
 
 
 type Octave
-    = SubContra
-    | Contra
-    | Great
-    | Small
-    | OneLined
-    | TwoLined
-    | ThreeLined
-    | FourLined
-    | FiveLined
-    | SixLined
+    = SubContraOctave
+    | ContraOctave
+    | GreatOctave
+    | SmallOctave
+    | OneLinedOctave
+    | TwoLinedOctave
+    | ThreeLinedOctave
+    | FourLinedOctave
+    | FiveLinedOctave
+    | SixLinedOctave
 
 
 type alias Note =
@@ -109,39 +109,52 @@ getNext note =
         nextOctave =
             if base == B then
                 case octave of
-                    SubContra ->
-                      Contra
+                    SubContraOctave ->
+                      ContraOctave
 
-                    Contra ->
-                        Great
+                    ContraOctave ->
+                        GreatOctave
 
-                    Great ->
-                        Small
+                    GreatOctave ->
+                        SmallOctave
 
-                    Small ->
-                        OneLined
+                    SmallOctave ->
+                        OneLinedOctave
 
-                    OneLined ->
-                        TwoLined
+                    OneLinedOctave ->
+                        TwoLinedOctave
 
-                    TwoLined ->
-                        ThreeLined
+                    TwoLinedOctave ->
+                        ThreeLinedOctave
 
-                    ThreeLined ->
-                        FourLined
+                    ThreeLinedOctave ->
+                        FourLinedOctave
 
-                    FourLined ->
-                        FiveLined
+                    FourLinedOctave ->
+                        FiveLinedOctave
 
-                    FiveLined ->
-                        SixLined
+                    FiveLinedOctave ->
+                        SixLinedOctave
 
-                    SixLined ->
-                        SixLined
+                    SixLinedOctave ->
+                        SixLinedOctave
             else
                 octave
     in
     { base = nextBase, accidental = nextAccidental, octave = nextOctave }
+
+
+plusSemitones : Int -> Note -> Note
+plusSemitones semitonesNumber note =
+    let
+        gen prev n =
+            if n > 0 then
+                gen (getNext prev) (n - 1)
+
+            else
+                prev
+    in
+    gen note semitonesNumber
 
 
 toString : Note -> String
@@ -187,34 +200,34 @@ toString note =
 
         octaveNumber=
             case octave of
-                SubContra ->
+                SubContraOctave ->
                     0
 
-                Contra ->
+                ContraOctave ->
                     1
 
-                Great ->
+                GreatOctave ->
                     2
 
-                Small ->
+                SmallOctave ->
                     3
 
-                OneLined ->
+                OneLinedOctave ->
                     4
 
-                TwoLined ->
+                TwoLinedOctave ->
                     5
 
-                ThreeLined ->
+                ThreeLinedOctave ->
                     6
 
-                FourLined ->
+                FourLinedOctave ->
                     7
 
-                FiveLined ->
+                FiveLinedOctave ->
                     8
 
-                SixLined ->
+                SixLinedOctave ->
                     9
     in
     baseString ++ accidentalString ++ (String.fromInt octaveNumber)
