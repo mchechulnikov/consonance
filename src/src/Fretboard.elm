@@ -5,12 +5,14 @@ import Guitar exposing (FretPoint, Guitar, GuitarFret, GuitarString(..), Tuning,
 import Css exposing (..)
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (css)
+import Html.Styled.Events exposing (onClick)
 import Note exposing (Note)
 
 
 
 type Msg
     = Idle
+    | SelectTonic Note
 
 
 type alias Model =
@@ -86,5 +88,6 @@ viewFretPoint fretPointState note =
                 [ backgroundColor (rgba 255 213 0 0.2431)
                 ]
             ]
+        , onClick (SelectTonic note)
         ]
         [ note |> Note.toString |> text ]

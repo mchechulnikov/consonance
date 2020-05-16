@@ -120,7 +120,7 @@ takeChord guitar chord =
                         List.member note chordNotes
                             |> boolToMaybe (stringIndex + 1, fretNumber)
                 in
-                List.indexedMap getStringFretPair stringLayout
+                stringLayout |> List.indexedMap getStringFretPair
             )
         |> flatten2D
         |> List.filter ((/=) Nothing)

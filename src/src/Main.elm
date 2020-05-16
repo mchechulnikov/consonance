@@ -48,14 +48,8 @@ init _ _ _ =
     ( FretboardModel
         { guitar = guitar
         , selectedFretPoints =
-            MinorChord { base = A, acc = Nothing, oct = ThreeLinedOctave}
+            MajorChord { base = A, acc = Nothing, oct = SmallOctave}
                 |> Guitar.takeChord guitar
-            --[ { string = GuitarString 1, fret = GuitarFret 0 }
-            --, { string = GuitarString 2, fret = GuitarFret 1 }
-            --, { string = GuitarString 3, fret = GuitarFret 2 }
-            --, { string = GuitarString 4, fret = GuitarFret 2 }
-            --, { string = GuitarString 5, fret = GuitarFret 0 }
-            --]
         }
     , Cmd.none
     )
@@ -96,6 +90,15 @@ update msg model =
             case fretboardMsg of
                 Fretboard.Idle ->
                     (model, Cmd.none)
+
+                Fretboard.SelectTonic note ->
+                    ( FretboardModel
+                        { fretboardModel
+                        | selectedFretPoints =
+                            Guitar.takeChord fretboardModel.guitar (MajorChord note)
+                        }
+                    , Cmd.none
+                    )
 
 
 
