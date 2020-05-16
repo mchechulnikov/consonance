@@ -4,6 +4,7 @@ import Basics.Extra exposing (flip, uncurry)
 import Chord exposing (Chord)
 import Note exposing (Base(..), Note, Octave(..))
 import List.Extra as List exposing (..)
+import Scale exposing (Scale)
 import Utils exposing (boolToMaybe, flatten2D)
 
 
@@ -111,13 +112,26 @@ unwindTuning tuning =
 
 takeChord : Guitar -> Chord -> List FretPoint
 takeChord guitar chord =
-    let chordNotes = Chord.toNotes chord in
+    chord
+        |> Chord.toNotes
+        |> takeNotes guitar
+
+
+takeScale : Guitar -> Scale -> List FretPoint
+takeScale guitar scale =
+    scale
+        |> Scale.toNotes
+        |> takeNotes guitar
+
+
+takeNotes : Guitar -> List Note -> List FretPoint
+takeNotes guitar notes =
     guitar.layout
         |> List.indexedMap
             (\stringIndex stringLayout ->
                 let
                     getStringFretPair fretNumber note =
-                        List.member note chordNotes
+                        List.member note notes
                             |> boolToMaybe (stringIndex + 1, fretNumber)
                 in
                 stringLayout |> List.indexedMap getStringFretPair

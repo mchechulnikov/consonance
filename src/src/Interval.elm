@@ -1,6 +1,8 @@
 module Interval exposing (..)
 
+import List exposing (reverse)
 import Note exposing (Note)
+import Tuple exposing (second)
 
 
 
@@ -183,3 +185,101 @@ toString interval =
 
         AugmentedSeventh _ ->
             "A7"
+
+
+extractNote : Interval -> Note
+extractNote interval =
+    case interval of
+        PerfectUnison note ->
+            note
+
+        DiminishedSecond note ->
+            note
+
+        MinorSecond note ->
+            note
+
+        AugmentedUnison note ->
+            note
+
+        MajorSecond note ->
+            note
+
+        DiminishedThird note ->
+            note
+
+        MinorThird note ->
+            note
+
+        AugmentedSecond note ->
+            note
+
+        MajorThird note ->
+            note
+
+        DiminishedFourth note ->
+            note
+
+        PerfectFourth note ->
+            note
+
+        AugmentedThird note ->
+            note
+
+        AugmentedFourth note ->
+            note
+
+        DiminishedFifth note ->
+            note
+
+        PerfectFifth note ->
+            note
+
+        DiminishedSixth note ->
+            note
+
+        MinorSixth note ->
+            note
+
+        AugmentedFifth note ->
+            note
+
+        MajorSixth note ->
+            note
+
+        DiminishedSeventh note ->
+            note
+
+        MinorSeventh note ->
+            note
+
+        AugmentedSixth note ->
+            note
+
+        MajorSeventh note ->
+            note
+
+        DiminishedOctave note ->
+            note
+
+        PerfectOctave note ->
+            note
+
+        AugmentedSeventh note ->
+            note
+
+
+structure : Note -> List (Note -> Interval) -> List Interval
+structure startNote intervalFunctions =
+    intervalFunctions
+       |> List.foldl
+           (\intervalFunc (note, acc) ->
+               let
+                   interval = intervalFunc note
+                   nextNote = note |> Note.plusSemitones (getSemitonesNumbers interval)
+               in
+               (nextNote, interval :: acc)
+           )
+           (startNote, [])
+       |> second
+       |> reverse

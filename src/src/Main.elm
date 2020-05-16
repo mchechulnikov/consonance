@@ -8,6 +8,7 @@ import Guitar exposing (GuitarFret(..), GuitarString(..))
 import Html exposing (..)
 import Html.Styled
 import Note exposing (Base(..), Octave(..))
+import Scale exposing (Scale(..))
 import Url exposing (Url)
 
 
@@ -95,7 +96,8 @@ update msg model =
                     ( FretboardModel
                         { fretboardModel
                         | selectedFretPoints =
-                            Guitar.takeChord fretboardModel.guitar (MajorChord note)
+                            --Guitar.takeChord fretboardModel.guitar (MajorChord note)
+                            Guitar.takeScale fretboardModel.guitar (MinorPentatonicScale note)
                         }
                     , Cmd.none
                     )
