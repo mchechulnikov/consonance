@@ -31,18 +31,18 @@ type Octave
 
 type alias Note =
     { base : Base
-    , accidental : Maybe Accidental
-    , octave : Octave
+    , acc : Maybe Accidental
+    , oct : Octave
     }
 
 
 getNext : Note -> Note
 getNext note =
     let
-        { base, accidental, octave } = note
+        { base, acc, oct } = note
 
         (nextBase, nextAccidental) =
-            case (base, accidental) of
+            case (base, acc) of
                 (A, Just Flat) ->
                     (A, Nothing)
 
@@ -108,7 +108,7 @@ getNext note =
 
         nextOctave =
             if base == B then
-                case octave of
+                case oct of
                     SubContraOctave ->
                       ContraOctave
 
@@ -139,9 +139,9 @@ getNext note =
                     SixLinedOctave ->
                         SixLinedOctave
             else
-                octave
+                oct
     in
-    { base = nextBase, accidental = nextAccidental, octave = nextOctave }
+    { base = nextBase, acc = nextAccidental, oct = nextOctave }
 
 
 plusSemitones : Int -> Note -> Note
@@ -160,7 +160,7 @@ plusSemitones semitonesNumber note =
 toString : Note -> String
 toString note =
     let
-        { base, accidental, octave } = note
+        { base, acc, oct } = note
 
         baseString =
             case base of
@@ -186,7 +186,7 @@ toString note =
                     "G"
 
         accidentalString =
-            accidental
+            acc
                 |> Maybe.map
                     (\a ->
                         case a of
@@ -199,7 +199,7 @@ toString note =
                 |> Maybe.withDefault ""
 
         octaveNumber=
-            case octave of
+            case oct of
                 SubContraOctave ->
                     0
 

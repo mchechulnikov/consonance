@@ -1,13 +1,15 @@
 port module Main exposing (..)
 
+import Chord exposing (Chord(..))
 import Fretboard
 import Browser
 import Browser.Navigation exposing (Key)
-import Guitar exposing (GuitarFret(..), GuitarString(..), guitarString, standardTuning)
-import Note exposing (..)
+import Guitar exposing (GuitarFret(..), GuitarString(..))
 import Html exposing (..)
 import Html.Styled
+import Note exposing (Base(..), Octave(..))
 import Url exposing (Url)
+
 
 
 
@@ -42,18 +44,18 @@ document model =
 
 init : () -> Url -> Key -> (Model, Cmd msg)
 init _ _ _ =
+    let guitar = Guitar.new Guitar.standardTuning 22 in
     ( FretboardModel
-        { guitar =
-            { tuning = Guitar.standardTuning
-            , fretsNumber = 22
-            }
+        { guitar = guitar
         , selectedFretPoints =
-            [ { string = GuitarString 1, fret = GuitarFret 0 }
-            , { string = GuitarString 2, fret = GuitarFret 1 }
-            , { string = GuitarString 3, fret = GuitarFret 2 }
-            , { string = GuitarString 4, fret = GuitarFret 2 }
-            , { string = GuitarString 5, fret = GuitarFret 0 }
-            ]
+            MinorChord { base = A, acc = Nothing, oct = ThreeLinedOctave}
+                |> Guitar.takeChord guitar
+            --[ { string = GuitarString 1, fret = GuitarFret 0 }
+            --, { string = GuitarString 2, fret = GuitarFret 1 }
+            --, { string = GuitarString 3, fret = GuitarFret 2 }
+            --, { string = GuitarString 4, fret = GuitarFret 2 }
+            --, { string = GuitarString 5, fret = GuitarFret 0 }
+            --]
         }
     , Cmd.none
     )

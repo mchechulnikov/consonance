@@ -1,17 +1,21 @@
 module Guitar exposing (..)
 
+import Basics.Extra exposing (flip, uncurry)
+import Chord exposing (Chord)
 import Note exposing (Base(..), Note, Octave(..))
+import List.Extra as List exposing (..)
+import Utils exposing (boolToMaybe, flatten2D)
 
 
 
 standardTuning
     = SixStringTuning
-        { base = E, accidental = Nothing, octave = OneLinedOctave }
-        { base = B, accidental = Nothing, octave = SmallOctave }
-        { base = G, accidental = Nothing, octave = SmallOctave }
-        { base = D, accidental = Nothing, octave = SmallOctave }
-        { base = A, accidental = Nothing, octave = GreatOctave }
-        { base = E, accidental = Nothing, octave = GreatOctave }
+        { base = E, acc = Nothing, oct = OneLinedOctave }
+        { base = B, acc = Nothing, oct = SmallOctave }
+        { base = G, acc = Nothing, oct = SmallOctave }
+        { base = D, acc = Nothing, oct = SmallOctave }
+        { base = A, acc = Nothing, oct = GreatOctave }
+        { base = E, acc = Nothing, oct = GreatOctave }
 
 
 
@@ -24,6 +28,7 @@ type Tuning
 type alias Guitar =
     { tuning : Tuning
     , fretsNumber : Int
+    , layout : List (List Note)
     }
 
 
@@ -46,6 +51,13 @@ fretPoint guitar (string, fret) =
     { string = guitarString guitar.tuning string
     , fret = guitarFret guitar.fretsNumber fret
     }
+
+
+new : Tuning -> Int -> Guitar
+new tuning fretNumbers =
+    unwindTuning tuning
+        |> List.map (generateStringLayout fretNumbers)
+        |> Guitar tuning fretNumbers
 
 
 guitarString : Tuning -> Int -> GuitarString
@@ -95,3 +107,21 @@ unwindTuning tuning =
 
         EightStringTuning n1 n2 n3 n4 n5 n6 n7 n8 ->
             [ n1, n2, n3, n4, n5, n6, n7, n8 ]
+
+
+takeChord : Guitar -> Chord -> List FretPoint
+takeChord guitar chord =
+    let chordNotes = Chord.toNotes chord in
+    guitar.layout
+        |> List.indexedMap
+            (\stringIndex stringLayout ->
+                let
+                    getStringFretPair fretNumber note =
+                        List.member note chordNotes
+                            |> boolToMaybe (stringIndex + 1, fretNumber)
+                in
+                List.indexedMap getStringFretPair stringLayout
+            )
+        |> flatten2D
+        |> List.filter ((/=) Nothing)
+        |> List.map (Maybe.withDefault (0, 0) >> fretPoint guitar)

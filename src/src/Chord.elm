@@ -12,25 +12,6 @@ type Chord
     | DiminishedChord Note
 
 
-fromIntervals : Interval -> Interval -> Maybe Chord
-fromIntervals interval1 interval2 =
-    case (interval1, interval2) of
-        (MinorThird a, MajorThird _) ->
-            Just (MajorChord a)
-
-        (MajorThird a, MinorThird _) ->
-            Just (MinorChord a)
-
-        (MinorThird a, MinorThird _) ->
-            Just (DiminishedChord a)
-
-        (MajorThird a, MajorThird _) ->
-            Just (AugmentedChord a)
-
-        (_, _) ->
-            Nothing
-
-
 toNotes : Chord -> List Note
 toNotes chord =
     let
@@ -49,7 +30,7 @@ toNotes chord =
                     tonic
 
                 DiminishedChord tonic ->
-                     tonic
+                    tonic
 
         second =
             first |> Note.plusSemitones (Interval.getSemitonesNumbers interval1)
@@ -58,6 +39,25 @@ toNotes chord =
             second |> Note.plusSemitones (Interval.getSemitonesNumbers interval2)
     in
     [ first, second, third]
+
+
+fromIntervals : Interval -> Interval -> Maybe Chord
+fromIntervals interval1 interval2 =
+    case (interval1, interval2) of
+        (MinorThird a, MajorThird _) ->
+            Just (MajorChord a)
+
+        (MajorThird a, MinorThird _) ->
+            Just (MinorChord a)
+
+        (MinorThird a, MinorThird _) ->
+            Just (DiminishedChord a)
+
+        (MajorThird a, MajorThird _) ->
+            Just (AugmentedChord a)
+
+        (_, _) ->
+            Nothing
 
 
 chordStructure : Chord -> (Interval, Interval)
