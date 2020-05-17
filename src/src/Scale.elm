@@ -4,7 +4,6 @@ import Interval exposing (Interval(..))
 import Note exposing (Note)
 
 
-
 type Scale
     = MajorPentatonicScale Note
     | MinorPentatonicScale Note
@@ -13,26 +12,35 @@ type Scale
 toNotes : Scale -> List Note
 toNotes scale =
     case scale of
-        MajorPentatonicScale _ ->
-            scale
-                |> pentatonicStructure
-                |> List.map Interval.extractNote
-
-        MinorPentatonicScale _ ->
-            scale
-                |> pentatonicStructure
-                |> List.map Interval.extractNote
-
-
-pentatonicStructure : Scale -> List Interval
-pentatonicStructure chord =
-    case chord of
         MajorPentatonicScale tonic ->
-            Interval.structure
-                tonic
-                [ MajorSecond, MajorSecond, MinorThird, MajorSecond, MinorThird ]
+            [ MajorSecond, MajorSecond, MinorThird, MajorSecond, MinorThird ]
+                |> Interval.structure tonic
+                |> .notes
 
         MinorPentatonicScale tonic ->
-            Interval.structure
-                tonic
-                [ MinorThird, MajorSecond, MajorSecond, MinorThird, MajorSecond ]
+            [ MinorThird, MajorSecond, MajorSecond, MinorThird, MajorSecond ]
+                |> Interval.structure tonic
+                |> .notes
+
+
+toKindString : Scale -> String
+toKindString scale =
+    case scale of
+        MajorPentatonicScale _ ->
+            "major pentatonic"
+
+        MinorPentatonicScale _ ->
+            "minor pentatonic"
+
+
+fromKindString : String -> Maybe (Note -> Scale)
+fromKindString val =
+    case val of
+        "major pentatonic" ->
+            Just MajorPentatonicScale
+
+        "minor pentatonic" ->
+            Just MinorPentatonicScale
+
+        _ ->
+            Nothing

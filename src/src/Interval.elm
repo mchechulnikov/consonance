@@ -269,17 +269,17 @@ extractNote interval =
             note
 
 
-structure : Note -> List (Note -> Interval) -> List Interval
+structure : Note -> List (Note -> Interval) -> { intervals : List Interval, notes : List Note }
 structure startNote intervalFunctions =
     intervalFunctions
        |> List.foldl
-           (\intervalFunc (note, acc) ->
+           (\intervalFunc (note, { intervals, notes }) ->
                let
                    interval = intervalFunc note
                    nextNote = note |> Note.plusSemitones (getSemitonesNumbers interval)
                in
-               (nextNote, interval :: acc)
+               (nextNote, { intervals = interval :: intervals, notes = nextNote :: notes })
            )
-           (startNote, [])
+           (startNote, { intervals = [], notes = [ startNote ] })
        |> second
-       |> reverse
+       |> (\x -> { x | intervals = reverse x.intervals, notes = reverse x.notes })

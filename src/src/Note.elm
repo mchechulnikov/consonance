@@ -1,5 +1,8 @@
 module Note exposing (..)
 
+import Parser exposing ((|.), (|=), backtrackable, deadEndsToString, end, int, keyword, oneOf, succeed, symbol)
+
+
 
 type Base
     = A
@@ -231,3 +234,42 @@ toString note =
                     9
     in
     baseString ++ accidentalString ++ (String.fromInt octaveNumber)
+
+
+fromString : String -> Maybe Note
+fromString val =
+    let
+        baseParser =
+            oneOf
+                [ succeed A |. symbol "A"
+                , succeed B |. symbol "B"
+                , succeed C |. symbol "C"
+                , succeed D |. symbol "D"
+                , succeed E |. symbol "E"
+                , succeed F |. symbol "F"
+                , succeed G |. symbol "G"
+                ]
+
+        accParser =
+            oneOf
+                [ succeed (Just Sharp) |. symbol "♯"
+                , succeed (Just Flat) |. symbol  "♭"
+                , succeed Nothing
+                ]
+
+        octParser =
+            oneOf
+                [ succeed SubContraOctave |. symbol "0"
+                , succeed ContraOctave |. symbol "1"
+                , succeed GreatOctave |. symbol "2"
+                , succeed SmallOctave |. symbol "3"
+                , succeed OneLinedOctave |. symbol "4"
+                , succeed TwoLinedOctave |. symbol "5"
+                , succeed ThreeLinedOctave |. symbol "6"
+                , succeed FourLinedOctave |. symbol "7"
+                , succeed FiveLinedOctave |. symbol "8"
+                , succeed SixLinedOctave |. symbol "9"
+                ]
+    in
+    Parser.run (succeed Note |= baseParser |= accParser |= octParser |. end) val
+        |> Result.toMaybe
