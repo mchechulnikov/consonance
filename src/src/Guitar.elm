@@ -2,6 +2,7 @@ module Guitar exposing (..)
 
 import Basics.Extra exposing (flip, uncurry)
 import Chord exposing (Chord)
+import Interval exposing (Interval)
 import Note exposing (Base(..), Note, Octave(..))
 import List.Extra as List exposing (..)
 import Scale exposing (Scale)
@@ -44,13 +45,22 @@ type GuitarFret
 type alias FretPoint =
     { string : GuitarString
     , fret : GuitarFret
+    , kind : FretPointKind
     }
 
 
-fretPoint : Guitar -> (Int, Int) -> FretPoint
-fretPoint guitar (string, fret) =
+type FretPointKind
+    = NormalFretPoint
+    | StartFretPoint
+    | SelectedFretPoint
+    | StopFretPoint
+
+
+fretPoint : Guitar -> (FretPointKind, Int, Int) -> FretPoint
+fretPoint guitar (kind, string, fret) =
     { string = guitarString guitar.tuning string
     , fret = guitarFret guitar.fretsNumber fret
+    , kind = kind
     }
 
 
@@ -124,18 +134,40 @@ takeScale guitar scale =
         |> takeNotes guitar
 
 
+takeInterval : Guitar -> Interval -> List FretPoint
+takeInterval guitar interval =
+    interval
+        |> Interval.toNotes
+        |> takeNotes guitar
+
+
 takeNotes : Guitar -> List Note -> List FretPoint
 takeNotes guitar notes =
+    let
+        firstNote = List.head notes
+        lastNote = List.last notes
+
+        calcFretPointType note =
+            let noteIs n = n |> Maybe.map ((==) note) |> Maybe.withDefault False in
+            if noteIs firstNote then
+                StartFretPoint
+
+            else if noteIs lastNote then
+                StopFretPoint
+
+            else
+                SelectedFretPoint
+    in
     guitar.layout
         |> List.indexedMap
             (\stringIndex stringLayout ->
                 let
                     getStringFretPair fretNumber note =
                         List.member note notes
-                            |> boolToMaybe (stringIndex + 1, fretNumber)
+                            |> boolToMaybe (calcFretPointType note, stringIndex + 1, fretNumber)
                 in
                 stringLayout |> List.indexedMap getStringFretPair
             )
         |> flatten2D
         |> List.filter ((/=) Nothing)
-        |> List.map (Maybe.withDefault (0, 0) >> fretPoint guitar)
+        |> List.map (Maybe.withDefault (NormalFretPoint, 0, 0) >> fretPoint guitar)

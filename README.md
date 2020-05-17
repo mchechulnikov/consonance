@@ -1,5 +1,15 @@
 # Consonance
 Guitar fretboard assistant
+![scr](./docs/scr.png)
+
+# Roadmap for MVP
+- [x] Simplest fretboard
+- [x] Intervals, chords, scales
+- [x] Routing
+- [ ] Advanced chords
+- [ ] Inversions of chords
+- [ ] Chord forms
+- [ ] Training mode
 
 ## How to run locally
 ### Docker way

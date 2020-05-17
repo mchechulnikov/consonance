@@ -8,6 +8,7 @@ import Guitar exposing (FretPoint, Guitar, GuitarFret(..), GuitarString(..))
 import Html exposing (..)
 import Html.Attributes exposing (href)
 import Html.Styled
+import Interval
 import List exposing (singleton)
 import Note exposing (Base(..), Octave(..))
 import Router exposing (Route(..))
@@ -130,6 +131,13 @@ selectFretPoints guitar route =
                 |> Maybe.map (singleton >> Guitar.takeNotes guitar)
                 |> Maybe.withDefault []
 
+        RouteInterval intervalKind val ->
+            Url.percentDecode val
+                |> Maybe.andThen Note.fromString
+                |> Maybe.map2 (\interval note -> interval note) (Interval.fromKindString (replaceSpaces intervalKind))
+                |> Maybe.map (Guitar.takeInterval guitar)
+                |> Maybe.withDefault []
+
         RouteChord chordKind val ->
             Url.percentDecode val
                 |> Maybe.andThen Note.fromString
@@ -167,8 +175,18 @@ view model =
             |> Html.map FretboardMsg
         , div []
             [ div [] [ a [ href "/note/C3" ] [ text "note C3" ] ]
-            , div [] [ a [ href "/chord/major/C3" ] [ text "major chord C3" ] ]
-            , div [] [ a [ href "/chord/minor/C3" ] [ text "minor chord C3" ] ]
+            , div [] [ a [ href "/interval/m2/C3" ] [ text "minor second C3" ] ]
+            , div [] [ a [ href "/interval/M2/C3" ] [ text "major second C3" ] ]
+            , div [] [ a [ href "/interval/m3/C3" ] [ text "minor third C3" ] ]
+            , div [] [ a [ href "/interval/M3/C3" ] [ text "minor second C3" ] ]
+            , div [] [ a [ href "/interval/P4/C3" ] [ text "pure fourth C3" ] ]
+            , div [] [ a [ href "/interval/A4/C3" ] [ text "triton C3" ] ]
+            , div [] [ a [ href "/interval/P5/C3" ] [ text "pure fifth C3" ] ]
+            , div [] [ a [ href "/interval/m6/C3" ] [ text "minor sixth C3" ] ]
+            , div [] [ a [ href "/interval/M6/C3" ] [ text "major sixth C3" ] ]
+            , div [] [ a [ href "/interval/m7/C3" ] [ text "minor seventh C3" ] ]
+            , div [] [ a [ href "/interval/M7/C3" ] [ text "major seventh C3" ] ]
+            , div [] [ a [ href "/interval/P8/C3" ] [ text "pure octave C3" ] ]
             , div [] [ a [ href "/chord/augmented/C3" ] [ text "augmented chord C3" ] ]
             , div [] [ a [ href "/chord/diminished/C3" ] [ text "diminished chord C3" ] ]
             , div [] [ a [ href "/scale/major-pentatonic/C3" ] [ text "major pentatonic scale C3" ] ]
@@ -183,5 +201,8 @@ view model =
             , div [] [ a [ href "/scale/myxolydian/G2" ] [ text "myxolydian scale G2" ] ]
             , div [] [ a [ href "/scale/aeolian/A2" ] [ text "aeolian scale (natural minor) A2" ] ]
             , div [] [ a [ href "/scale/locrian/B2" ] [ text "locrian scale B2" ] ]
+            , div [] [ a [ href "/scale/chromatic/C3" ] [ text "chromatic scale C3" ] ]
+            , div [] [ a [ href "/scale/fourth-circle/G2" ] [ text "fourth scale G2" ] ]
+            , div [] [ a [ href "/scale/fifth-circle/G2" ] [ text "fifth scale G2" ] ]
             ]
         ]

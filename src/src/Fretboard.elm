@@ -1,11 +1,12 @@
 module Fretboard exposing (..)
 
 
-import Guitar exposing (FretPoint, Guitar, GuitarFret, GuitarString(..), Tuning, unwindTuning)
+import Guitar exposing (FretPoint, FretPointKind(..), Guitar, GuitarFret, GuitarString(..), Tuning, unwindTuning)
 import Css exposing (..)
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (css)
 import Html.Styled.Events exposing (onClick)
+import List.Extra as List
 import Note exposing (Note)
 
 
@@ -21,53 +22,42 @@ type alias Model =
     }
 
 
-type FretPointState
-    = NormalFretPoint
-    | SelectedFretPoint
-
-
 view : Model -> Html Msg
 view model =
     let
         selectedFretsOnString stringNumber =
             model.selectedFretPoints
                 |> List.filter (.string >> (==) (GuitarString stringNumber))
-                |> List.map .fret
+                --|> List.map .fret
 
         viewGuitarString stringNumber string =
             viewString
                 (selectedFretsOnString (stringNumber + 1))
-                model.guitar.fretsNumber
                 string
     in
-    model.guitar.tuning
-        |> unwindTuning
+    model.guitar.layout
         |> List.indexedMap viewGuitarString
         |> div
             []
 
 
-viewString : List GuitarFret -> Int -> Note -> Html Msg
-viewString selectedFrets fretNumbers stringTuning =
+viewString : List FretPoint -> List Note -> Html Msg
+viewString selectedFrets stringLayout =
     let
         viewGuitarFretPoint fretNumber note =
-            if selectedFrets |> List.member (Guitar.GuitarFret fretNumber) then
-                viewFretPoint SelectedFretPoint note
-
-            else
-                viewFretPoint NormalFretPoint note
+            selectedFrets
+                |> List.find (.fret >> (==) (Guitar.GuitarFret fretNumber))
+                |> Maybe.map .kind
+                |> Maybe.withDefault NormalFretPoint
+                |> viewFretPoint note
     in
-    Guitar.generateStringLayout fretNumbers stringTuning
+    stringLayout
         |> List.indexedMap viewGuitarFretPoint
-        |> div
-            [ css
-                [ displayFlex
-                ]
-            ]
+        |> div [ css [ displayFlex ] ]
 
 
-viewFretPoint : FretPointState -> Note -> Html Msg
-viewFretPoint fretPointState note =
+viewFretPoint : Note -> FretPointKind -> Html Msg
+viewFretPoint note fretPointState  =
     let
         backgroundStyle =
             case fretPointState of
@@ -75,7 +65,13 @@ viewFretPoint fretPointState note =
                     backgroundColor (rgb 255 255 255)
 
                 SelectedFretPoint ->
+                    backgroundColor (rgba 1 149 217 0.749)
+
+                StartFretPoint ->
                     backgroundColor (rgba 83 217 1 0.75)
+
+                StopFretPoint ->
+                    backgroundColor (rgba 83 217 1 0.502)
     in
     div
         [ css

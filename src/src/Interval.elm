@@ -105,8 +105,8 @@ getSemitonesNumbers interval =
             12
 
 
-toString : Interval -> String
-toString interval =
+toKindString : Interval -> String
+toKindString interval =
     case interval of
         PerfectUnison _ ->
             "P1"
@@ -187,86 +187,89 @@ toString interval =
             "A7"
 
 
-extractNote : Interval -> Note
-extractNote interval =
-    case interval of
-        PerfectUnison note ->
-            note
+fromKindString : String -> Maybe (Note -> Interval)
+fromKindString string =
+    case string of
+        "P1" ->
+            Just PerfectUnison
 
-        DiminishedSecond note ->
-            note
+        "d2" ->
+            Just DiminishedSecond
 
-        MinorSecond note ->
-            note
+        "m2" ->
+            Just MinorSecond
 
-        AugmentedUnison note ->
-            note
+        "A1" ->
+            Just AugmentedUnison
 
-        MajorSecond note ->
-            note
+        "M2" ->
+            Just MajorSecond
 
-        DiminishedThird note ->
-            note
+        "d3" ->
+            Just DiminishedThird
 
-        MinorThird note ->
-            note
+        "m3" ->
+            Just MinorThird
 
-        AugmentedSecond note ->
-            note
+        "A2" ->
+            Just AugmentedSecond
 
-        MajorThird note ->
-            note
+        "M3" ->
+            Just MajorThird
 
-        DiminishedFourth note ->
-            note
+        "d4" ->
+            Just DiminishedFourth
 
-        PerfectFourth note ->
-            note
+        "P4" ->
+            Just PerfectFourth
 
-        AugmentedThird note ->
-            note
+        "A3" ->
+            Just AugmentedThird
 
-        AugmentedFourth note ->
-            note
+        "A4" ->
+            Just AugmentedFourth
 
-        DiminishedFifth note ->
-            note
+        "d5" ->
+            Just DiminishedFifth
 
-        PerfectFifth note ->
-            note
+        "P5" ->
+            Just PerfectFifth
 
-        DiminishedSixth note ->
-            note
+        "d6" ->
+            Just DiminishedSixth
 
-        MinorSixth note ->
-            note
+        "m6" ->
+            Just MinorSixth
 
-        AugmentedFifth note ->
-            note
+        "A5" ->
+            Just AugmentedFifth
 
-        MajorSixth note ->
-            note
+        "M6" ->
+            Just MajorSixth
 
-        DiminishedSeventh note ->
-            note
+        "d7" ->
+            Just DiminishedSeventh
 
-        MinorSeventh note ->
-            note
+        "m7" ->
+            Just MinorSeventh
 
-        AugmentedSixth note ->
-            note
+        "A6" ->
+            Just AugmentedSixth
 
-        MajorSeventh note ->
-            note
+        "M7" ->
+            Just MajorSeventh
 
-        DiminishedOctave note ->
-            note
+        "d8" ->
+            Just DiminishedOctave
 
-        PerfectOctave note ->
-            note
+        "P8" ->
+            Just PerfectOctave
 
-        AugmentedSeventh note ->
-            note
+        "A7" ->
+            Just AugmentedSeventh
+
+        _ ->
+            Nothing
 
 
 structure : Note -> List (Note -> Interval) -> { intervals : List Interval, notes : List Note }
@@ -283,3 +286,86 @@ structure startNote intervalFunctions =
            (startNote, { intervals = [], notes = [ startNote ] })
        |> second
        |> (\x -> { x | intervals = reverse x.intervals, notes = reverse x.notes })
+
+
+toNotes : Interval -> List Note
+toNotes interval =
+    let getNotes tonic intervals = intervals |> structure tonic |> .notes in
+    case interval of
+        PerfectUnison tonic ->
+            getNotes tonic [ PerfectUnison ]
+
+        DiminishedSecond tonic ->
+            getNotes tonic [ DiminishedSecond ]
+
+        MinorSecond tonic ->
+            getNotes tonic [ MinorSecond ]
+
+        AugmentedUnison tonic ->
+            getNotes tonic [ AugmentedUnison ]
+
+        MajorSecond tonic ->
+            getNotes tonic [ MajorSecond ]
+
+        DiminishedThird tonic ->
+            getNotes tonic [ DiminishedThird ]
+
+        MinorThird tonic ->
+            getNotes tonic [ MinorThird ]
+
+        AugmentedSecond tonic ->
+            getNotes tonic [ AugmentedSecond ]
+
+        MajorThird tonic ->
+            getNotes tonic [ MajorThird ]
+
+        DiminishedFourth tonic ->
+            getNotes tonic [ DiminishedFourth ]
+
+        PerfectFourth tonic ->
+            getNotes tonic [ PerfectFourth ]
+
+        AugmentedThird tonic ->
+            getNotes tonic [ AugmentedThird ]
+
+        AugmentedFourth tonic ->
+            getNotes tonic [ AugmentedFourth ]
+
+        DiminishedFifth tonic ->
+            getNotes tonic [ DiminishedFifth ]
+
+        PerfectFifth tonic ->
+            getNotes tonic [ PerfectFifth ]
+
+        DiminishedSixth tonic ->
+            getNotes tonic [ DiminishedSixth ]
+
+        MinorSixth tonic ->
+            getNotes tonic [ MinorSixth ]
+
+        AugmentedFifth tonic ->
+            getNotes tonic [ AugmentedFifth ]
+
+        MajorSixth tonic ->
+            getNotes tonic [ MajorSixth ]
+
+        DiminishedSeventh tonic ->
+            getNotes tonic [ DiminishedSeventh ]
+
+        MinorSeventh tonic ->
+            getNotes tonic [ MinorSeventh ]
+
+        AugmentedSixth tonic ->
+            getNotes tonic [ AugmentedSixth ]
+
+        MajorSeventh tonic ->
+            getNotes tonic [ MajorSeventh ]
+
+        DiminishedOctave tonic ->
+            getNotes tonic [ DiminishedOctave ]
+
+        PerfectOctave tonic ->
+            getNotes tonic [ PerfectOctave ]
+
+        AugmentedSeventh tonic ->
+            getNotes tonic [ AugmentedSeventh ]

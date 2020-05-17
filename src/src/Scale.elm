@@ -17,6 +17,9 @@ type Scale
     | MyxolydianScale Note
     | AeolianScale Note
     | LocrianScale Note
+    | ChromaticScale Note
+    | FourthScale Note
+    | FifthScale Note
 
 
 toNotes : Scale -> List Note
@@ -71,6 +74,24 @@ toNotes scale =
             [ MinorSecond, MajorSecond, MajorSecond, MinorSecond, MajorSecond, MajorSecond, MajorSecond ]
                 |> getNotes tonic
 
+        ChromaticScale tonic ->
+            [ MinorSecond, MinorSecond, MinorSecond, MinorSecond, MinorSecond, MinorSecond
+            , MinorSecond, MinorSecond, MinorSecond, MinorSecond, MinorSecond, MinorSecond
+            ]
+                |> getNotes tonic
+
+        FourthScale tonic ->
+            [ PerfectFourth, PerfectFourth, PerfectFourth, PerfectFourth, PerfectFourth, PerfectFourth
+            , PerfectFourth, PerfectFourth, PerfectFourth, PerfectFourth, PerfectFourth, PerfectFourth
+            ]
+                |> getNotes tonic
+
+        FifthScale tonic ->
+            [ PerfectFifth, PerfectFifth, PerfectFifth, PerfectFifth, PerfectFifth, PerfectFifth
+            , PerfectFifth, PerfectFifth, PerfectFifth, PerfectFifth, PerfectFifth, PerfectFifth
+            ]
+                |> getNotes tonic
+
 
 toKindString : Scale -> String
 toKindString scale =
@@ -111,6 +132,15 @@ toKindString scale =
         LocrianScale _ ->
             "locrian"
 
+        ChromaticScale _ ->
+            "chromatic"
+
+        FourthScale _ ->
+            "fourth circle"
+
+        FifthScale _ ->
+            "fifth circle"
+
 
 fromKindString : String -> Maybe (Note -> Scale)
 fromKindString val =
@@ -150,6 +180,15 @@ fromKindString val =
 
         "locrian" ->
             Just LocrianScale
+
+        "chromatic" ->
+            Just ChromaticScale
+
+        "fourth circle" ->
+            Just FourthScale
+
+        "fifth circle" ->
+            Just FifthScale
 
         _ ->
             Nothing

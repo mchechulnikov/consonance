@@ -8,6 +8,7 @@ import Url.Parser exposing ((</>), Parser, map, oneOf, parse, s, string)
 type Route
     = RouteRoot
     | RouteNote String
+    | RouteInterval String String
     | RouteChord String String
     | RouteScale String String
 
@@ -17,6 +18,7 @@ routeParser =
     oneOf
         [ map RouteScale (s "scale" </> string </> string)
         , map RouteChord (s "chord" </> string </> string)
+        , map RouteInterval (s "interval" </> string </> string)
         , map RouteNote (s "note" </> string)
         , map RouteRoot (s "")
         ]
@@ -40,8 +42,12 @@ changeValue route value =
         RouteNote _ ->
             "/note/" ++ note
 
+        RouteInterval intervalKind _ ->
+            "/interval/" ++ (replaceSpaces intervalKind) ++ "/" ++ note
+
         RouteChord chordKind _ ->
             "/chord/" ++ (replaceSpaces chordKind) ++ "/" ++ note
 
         RouteScale scaleKind _ ->
             "/scale/" ++ (replaceSpaces scaleKind) ++ "/" ++ note
+
