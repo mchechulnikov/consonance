@@ -189,6 +189,8 @@ view model =
             , div [] [ a [ href "/interval/P8/C3" ] [ text "pure octave C3" ] ]
             , div [] [ a [ href "/chord/augmented/C3" ] [ text "augmented chord C3" ] ]
             , div [] [ a [ href "/chord/diminished/C3" ] [ text "diminished chord C3" ] ]
+            , div [] [ a [ href "/chord/fourth/G2" ] [ text "fourth chord G2" ] ]
+            , div [] [ a [ href "/chord/fifth/G2" ] [ text "fifth chord G2" ] ]
             , div [] [ a [ href "/scale/major-pentatonic/C3" ] [ text "major pentatonic scale C3" ] ]
             , div [] [ a [ href "/scale/suspended-pentatonic/D3" ] [ text "suspended pentatonic scale D3" ] ]
             , div [] [ a [ href "/scale/blues-minor-pentatonic/E3" ] [ text "blues minor pentatonic scale E3" ] ]

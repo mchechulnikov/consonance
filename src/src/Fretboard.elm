@@ -83,6 +83,9 @@ viewFretPoint note fretPointState  =
             , hover
                 [ backgroundColor (rgba 255 213 0 0.2431)
                 ]
+            , active
+                [ backgroundColor (rgba 255 213 0 0.749)
+                ]
             ]
         , onClick (SelectTonic note)
         ]

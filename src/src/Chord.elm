@@ -10,6 +10,8 @@ type Chord
     | MinorChord Note
     | AugmentedChord Note
     | DiminishedChord Note
+    | FourthChord Note
+    | FifthChord Note
 
 
 toNotes : Chord -> List Note
@@ -34,81 +36,16 @@ toNotes chord =
             [ MinorThird, MinorThird ]
                 |> Interval.structure tonic
                 |> .notes
-    --let
-    --    (interval1, interval2) =
-    --        chordStructure chord
-    --
-    --    first =
-    --        case chord of
-    --            MajorChord tonic ->
-    --                tonic
-    --
-    --            MinorChord tonic ->
-    --                tonic
-    --
-    --            AugmentedChord tonic ->
-    --                tonic
-    --
-    --            DiminishedChord tonic ->
-    --                tonic
-    --
-    --    second =
-    --        first |> Note.plusSemitones (Interval.getSemitonesNumbers interval1)
-    --
-    --    third =
-    --        second |> Note.plusSemitones (Interval.getSemitonesNumbers interval2)
-    --in
-    --[ first, second, third]
 
+        FourthChord tonic ->
+            [ PerfectFourth, PerfectFifth ]
+                |> Interval.structure tonic
+                |> .notes
 
-fromIntervals : Interval -> Interval -> Maybe Chord
-fromIntervals interval1 interval2 =
-    case (interval1, interval2) of
-        (MinorThird a, MajorThird _) ->
-            Just (MajorChord a)
-
-        (MajorThird a, MinorThird _) ->
-            Just (MinorChord a)
-
-        (MinorThird a, MinorThird _) ->
-            Just (DiminishedChord a)
-
-        (MajorThird a, MajorThird _) ->
-            Just (AugmentedChord a)
-
-        (_, _) ->
-            Nothing
-
-
-chordStructure : Chord -> (Interval, Interval)
-chordStructure chord =
-    let
-        compute tonic interval1 interval2 =
-            let
-                first = interval1 tonic
-                second =
-                    tonic
-                        |> Note.plusSemitones (Interval.getSemitonesNumbers first)
-                        |> interval2
-            in
-            (first, second)
-    in
-    case chord of
-        MajorChord tonic ->
-            compute tonic MajorThird MinorThird
-
-        MinorChord tonic ->
-            compute tonic MinorThird MajorThird
-
-        AugmentedChord tonic ->
-            compute tonic MajorThird MajorThird
-
-        DiminishedChord tonic ->
-            compute tonic MinorThird MinorThird
-
-
---fromString : String -> Chord
---fromString string =
+        FifthChord tonic ->
+            [ PerfectFifth, PerfectFourth ]
+                |> Interval.structure tonic
+                |> .notes
 
 
 toString : Chord -> String
@@ -126,6 +63,12 @@ toString chord =
         DiminishedChord note ->
             (Note.toString note) ++ "dim"
 
+        FourthChord note ->
+            (Note.toString note) ++ "4"
+
+        FifthChord note ->
+            (Note.toString note) ++ "5"
+
 
 toKindString : Chord -> String
 toKindString chord =
@@ -142,6 +85,13 @@ toKindString chord =
         DiminishedChord _ ->
             "diminished"
 
+        FourthChord _ ->
+            "fourth"
+
+        FifthChord _ ->
+            "fifth"
+
+
 
 fromKindString : String -> Maybe (Note -> Chord)
 fromKindString val =
@@ -157,6 +107,12 @@ fromKindString val =
 
         "diminished" ->
             Just DiminishedChord
+
+        "fourth" ->
+            Just FourthChord
+
+        "fifth" ->
+            Just FifthChord
 
         _ ->
             Nothing
