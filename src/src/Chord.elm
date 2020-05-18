@@ -12,40 +12,70 @@ type Chord
     | DiminishedChord Note
     | FourthChord Note
     | FifthChord Note
+    | MajorSeventhChord Note
+    | MinorSeventhChord Note
+    | DominantSeventhChord Note
+    | DiminishedSeventhChord Note
+    | HalfDiminishedSeventhChord Note
+    | MinorMajorSeventhChord Note
+    | AugmentedMajorSeventhChord Note
 
 
 toNotes : Chord -> List Note
 toNotes chord =
+    let getNotes tonic intervals = intervals |> Interval.structure tonic |> .notes in
     case chord of
         MajorChord tonic ->
             [ MajorThird, MinorThird ]
-                |> Interval.structure tonic
-                |> .notes
+                |> getNotes tonic
 
         MinorChord tonic ->
             [ MinorThird, MajorThird ]
-                |> Interval.structure tonic
-                |> .notes
+                |> getNotes tonic
 
         AugmentedChord tonic ->
             [ MajorThird, MajorThird ]
-                |> Interval.structure tonic
-                |> .notes
+                |> getNotes tonic
 
         DiminishedChord tonic ->
             [ MinorThird, MinorThird ]
-                |> Interval.structure tonic
-                |> .notes
+                |> getNotes tonic
 
         FourthChord tonic ->
             [ PerfectFourth, PerfectFifth ]
-                |> Interval.structure tonic
-                |> .notes
+                |> getNotes tonic
 
         FifthChord tonic ->
             [ PerfectFifth, PerfectFourth ]
-                |> Interval.structure tonic
-                |> .notes
+                |> getNotes tonic
+
+        MajorSeventhChord tonic ->
+            [ MajorThird, MinorThird, MajorThird ]
+                |> getNotes tonic
+
+        MinorSeventhChord tonic ->
+            [ MinorThird, MajorThird, MinorThird ]
+                |> getNotes tonic
+
+        DominantSeventhChord tonic ->
+            [ MajorThird, MinorThird, MinorThird ]
+                |> getNotes tonic
+
+        DiminishedSeventhChord tonic ->
+            [ MinorThird, MinorThird, MinorThird ]
+                |> getNotes tonic
+
+        HalfDiminishedSeventhChord tonic ->
+            [ MinorThird, MinorThird, MajorThird ]
+                |> getNotes tonic
+
+        MinorMajorSeventhChord tonic ->
+            [ MinorThird, MajorThird, MajorThird ]
+                |> getNotes tonic
+
+        AugmentedMajorSeventhChord tonic ->
+            [ MajorThird, MajorThird, MinorThird ]
+                |> getNotes tonic
 
 
 toString : Chord -> String
@@ -69,6 +99,27 @@ toString chord =
         FifthChord note ->
             (Note.toString note) ++ "5"
 
+        MajorSeventhChord note ->
+            (Note.toString note) ++ "M7"
+
+        MinorSeventhChord note ->
+            (Note.toString note) ++ "m7"
+
+        DominantSeventhChord note ->
+            (Note.toString note) ++ "7"
+
+        DiminishedSeventhChord note ->
+            (Note.toString note) ++ "dim7"
+
+        HalfDiminishedSeventhChord note ->
+            (Note.toString note) ++ "m7♭5"
+
+        MinorMajorSeventhChord note ->
+            (Note.toString note) ++ "mM7"
+
+        AugmentedMajorSeventhChord note ->
+            (Note.toString note) ++ "M7♯5"
+
 
 toKindString : Chord -> String
 toKindString chord =
@@ -90,6 +141,27 @@ toKindString chord =
 
         FifthChord _ ->
             "fifth"
+
+        MajorSeventhChord _ ->
+            "major seventh"
+
+        MinorSeventhChord _ ->
+            "minor seventh"
+
+        DominantSeventhChord _ ->
+            "dominant seventh"
+
+        DiminishedSeventhChord _ ->
+            "diminished seventh"
+
+        HalfDiminishedSeventhChord _ ->
+            "half diminished seventh"
+
+        MinorMajorSeventhChord _ ->
+            "minor major seventh"
+
+        AugmentedMajorSeventhChord _ ->
+            "augmented major seventh"
 
 
 
@@ -113,6 +185,27 @@ fromKindString val =
 
         "fifth" ->
             Just FifthChord
+
+        "major seventh" ->
+            Just MajorSeventhChord
+
+        "minor seventh" ->
+            Just MinorSeventhChord
+
+        "dominant seventh" ->
+            Just DominantSeventhChord
+
+        "diminished seventh" ->
+            Just DiminishedSeventhChord
+
+        "half diminished seventh" ->
+            Just HalfDiminishedSeventhChord
+
+        "minor major seventh" ->
+            Just MinorMajorSeventhChord
+
+        "augmented major seventh" ->
+            Just AugmentedMajorSeventhChord
 
         _ ->
             Nothing
