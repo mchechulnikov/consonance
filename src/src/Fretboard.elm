@@ -28,7 +28,6 @@ view model =
         selectedFretsOnString stringNumber =
             model.selectedFretPoints
                 |> List.filter (.string >> (==) (GuitarString stringNumber))
-                --|> List.map .fret
 
         viewGuitarString stringNumber string =
             viewString
@@ -65,13 +64,13 @@ viewFretPoint note fretPointState  =
                     backgroundColor (rgb 255 255 255)
 
                 SelectedFretPoint ->
-                    backgroundColor (rgba 1 149 217 0.749)
+                    backgroundColor (rgb 60 185 241)
 
                 StartFretPoint ->
-                    backgroundColor (rgba 83 217 1 0.75)
+                    backgroundColor (rgb 123 236 55)
 
                 StopFretPoint ->
-                    backgroundColor (rgba 83 217 1 0.502)
+                    backgroundColor (rgb 179 227 152)
     in
     div
         [ css

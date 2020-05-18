@@ -1,6 +1,5 @@
 module Guitar exposing (..)
 
-import Basics.Extra exposing (flip, uncurry)
 import Chord exposing (Chord)
 import Interval exposing (Interval)
 import Note exposing (Base(..), Note, Octave(..))
@@ -67,7 +66,7 @@ fretPoint guitar (kind, string, fret) =
 new : Tuning -> Int -> Guitar
 new tuning fretNumbers =
     unwindTuning tuning
-        |> List.map (generateStringLayout fretNumbers)
+        |> List.map (Note.generateList fretNumbers)
         |> Guitar tuning fretNumbers
 
 
@@ -89,22 +88,6 @@ guitarFret : Int -> Int -> GuitarFret
 guitarFret fretsNumber value =
     let clampFret bound = clamp 0 bound value in
     GuitarFret (clampFret fretsNumber)
-
-
-generateStringLayout : Int -> Note -> List Note
-generateStringLayout fretNumbers stringTuning =
-    let
-        gen : Note -> Int -> List Note -> List Note
-        gen prev n acc =
-            if n > 0 then
-                let next = Note.getNext prev in
-                gen next (n - 1) (next :: acc)
-
-            else
-                acc
-    in
-    gen stringTuning fretNumbers [ stringTuning ]
-        |> List.reverse
 
 
 unwindTuning : Tuning -> List Note

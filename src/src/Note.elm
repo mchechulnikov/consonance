@@ -160,6 +160,22 @@ plusSemitones semitonesNumber note =
     gen note semitonesNumber
 
 
+generateList : Int -> Note -> List Note
+generateList amount firstNote =
+    let
+        gen : Note -> Int -> List Note -> List Note
+        gen prev n acc =
+            if n > 0 then
+                let next = getNext prev in
+                gen next (n - 1) (next :: acc)
+
+            else
+                acc
+    in
+    gen firstNote amount [ firstNote ]
+        |> List.reverse
+
+
 toString : Note -> String
 toString note =
     let
