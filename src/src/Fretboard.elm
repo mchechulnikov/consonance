@@ -6,6 +6,7 @@ import Css exposing (..)
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (css)
 import Html.Styled.Events exposing (onClick)
+import List exposing (singleton)
 import List.Extra as List
 import Note exposing (Note)
 
@@ -33,11 +34,27 @@ view model =
             viewString
                 (selectedFretsOnString (stringNumber + 1))
                 string
+
+        fretNumbersRow =
+            let
+                gen n acc =
+                    if n >= 0 then
+                        gen (n - 1) (n :: acc)
+                    else
+                        acc
+            in
+            gen model.guitar.fretsNumber []
+                |> List.map (String.fromInt >> text >> singleton)
+                |> List.map (div [ css [ displayFlex, padding (rem 1), width (rem 2) ] ])
+                |> div [ css [ displayFlex ] ]
     in
-    model.guitar.layout
-        |> List.indexedMap viewGuitarString
-        |> div
-            []
+    div
+        []
+        [ fretNumbersRow
+        , model.guitar.layout
+            |> List.indexedMap viewGuitarString
+            |> div []
+        ]
 
 
 viewString : List FretPoint -> List Note -> Html Msg
