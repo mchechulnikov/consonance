@@ -26,6 +26,12 @@ type Chord
     | DominantNinthChord Note
     | DominantEleventhChord Note
     | DominantThirteenThirteen Note
+    -- altered chords
+    | SeventhAugmentedFifthChord Note
+    | SeventhMinorNinthChord Note
+    | SeventhSharpNinthChord Note
+    | SeventhAugmentedEleventhChord Note
+    | SeventhDiminishedThirteenChord Note
 
 
 toNotes : Chord -> List Note
@@ -85,7 +91,7 @@ toNotes chord =
                 |> getNotes tonic
 
         DominantNinthChord tonic ->
-            [ MajorThird, MinorThird, MinorThird, MajorThird ] -- TODO
+            [ MajorThird, MinorThird, MinorThird, MajorThird ]
                 |> getNotes tonic
 
         DominantEleventhChord tonic ->
@@ -94,6 +100,26 @@ toNotes chord =
 
         DominantThirteenThirteen tonic ->
             [ MajorThird, MinorThird, MinorThird, MajorThird, MinorThird, MajorThird ]
+                |> getNotes tonic
+
+        SeventhAugmentedFifthChord tonic ->
+            [ MajorThird, MajorSecond, PerfectFourth ]
+                |> getNotes tonic
+
+        SeventhMinorNinthChord tonic ->
+            [ MajorThird, MinorThird, MinorThird, MinorThird ]
+                |> getNotes tonic
+
+        SeventhSharpNinthChord tonic ->
+            [ MajorThird, MinorThird, MinorThird, MajorThird, MajorThird ]
+                |> getNotes tonic
+
+        SeventhAugmentedEleventhChord tonic ->
+            [ MajorThird, MinorThird, MinorThird, MajorThird, MajorThird ]
+                |> getNotes tonic
+
+        SeventhDiminishedThirteenChord tonic ->
+            [ MajorThird, MinorThird, MinorThird, MajorThird, MinorThird, MinorThird ]
                 |> getNotes tonic
 
 
@@ -148,6 +174,21 @@ toString chord =
         DominantThirteenThirteen note ->
             (Note.toString note) ++ "13"
 
+        SeventhAugmentedFifthChord note ->
+            (Note.toString note) ++ "7♯5"
+
+        SeventhMinorNinthChord note ->
+            (Note.toString note) ++ "7♭5"
+
+        SeventhSharpNinthChord note ->
+            (Note.toString note) ++ "7♯9"
+
+        SeventhAugmentedEleventhChord note ->
+            (Note.toString note) ++ "7♯11"
+
+        SeventhDiminishedThirteenChord note ->
+            (Note.toString note) ++ "7♭13"
+
 
 toKindString : Chord -> String
 toKindString chord =
@@ -200,6 +241,20 @@ toKindString chord =
         DominantThirteenThirteen _ ->
             "dominant thirteen"
 
+        SeventhAugmentedFifthChord _ ->
+            "seventh augmented fifth"
+
+        SeventhMinorNinthChord _ ->
+            "seventh augmented ninth"
+
+        SeventhSharpNinthChord _ ->
+            "seventh sharp ninth"
+
+        SeventhAugmentedEleventhChord _ ->
+            "seventh augmented eleventh"
+
+        SeventhDiminishedThirteenChord _ ->
+            "seventh diminished thirteen"
 
 
 fromKindString : String -> Maybe (Note -> Chord)
@@ -252,6 +307,21 @@ fromKindString val =
 
         "dominant thirteen" ->
             Just DominantThirteenThirteen
+
+        "seventh augmented fifth" ->
+            Just SeventhAugmentedFifthChord
+
+        "seventh augmented ninth"->
+            Just SeventhMinorNinthChord
+
+        "seventh sharp ninth" ->
+            Just SeventhSharpNinthChord
+
+        "seventh augmented eleventh" ->
+            Just SeventhAugmentedEleventhChord
+
+        "seventh diminished thirteen" ->
+            Just SeventhDiminishedThirteenChord
 
         _ ->
             Nothing
