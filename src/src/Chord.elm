@@ -6,12 +6,15 @@ import Note exposing (..)
 
 
 type Chord
+    -- triads
     = MajorChord Note
     | MinorChord Note
     | AugmentedChord Note
     | DiminishedChord Note
+    -- power chords
     | FourthChord Note
     | FifthChord Note
+    -- seventh chords
     | MajorSeventhChord Note
     | MinorSeventhChord Note
     | DominantSeventhChord Note
@@ -19,6 +22,10 @@ type Chord
     | HalfDiminishedSeventhChord Note
     | MinorMajorSeventhChord Note
     | AugmentedMajorSeventhChord Note
+    -- extended chords
+    | DominantNinthChord Note
+    | DominantEleventhChord Note
+    | DominantThirteenThirteen Note
 
 
 toNotes : Chord -> List Note
@@ -77,6 +84,18 @@ toNotes chord =
             [ MajorThird, MajorThird, MinorThird ]
                 |> getNotes tonic
 
+        DominantNinthChord tonic ->
+            [ MajorThird, MinorThird, MinorThird, MajorThird ] -- TODO
+                |> getNotes tonic
+
+        DominantEleventhChord tonic ->
+            [ MajorThird, MinorThird, MinorThird, MajorThird, MinorThird ]
+                |> getNotes tonic
+
+        DominantThirteenThirteen tonic ->
+            [ MajorThird, MinorThird, MinorThird, MajorThird, MinorThird, MajorThird ]
+                |> getNotes tonic
+
 
 toString : Chord -> String
 toString chord =
@@ -119,6 +138,15 @@ toString chord =
 
         AugmentedMajorSeventhChord note ->
             (Note.toString note) ++ "M7♯5"
+
+        DominantNinthChord note ->
+            (Note.toString note) ++ "9"
+
+        DominantEleventhChord note ->
+            (Note.toString note) ++ "11"
+
+        DominantThirteenThirteen note ->
+            (Note.toString note) ++ "13"
 
 
 toKindString : Chord -> String
@@ -163,6 +191,15 @@ toKindString chord =
         AugmentedMajorSeventhChord _ ->
             "augmented major seventh"
 
+        DominantNinthChord _ ->
+            "dominant ninth"
+
+        DominantEleventhChord _ ->
+            "dominant eleventh"
+
+        DominantThirteenThirteen _ ->
+            "dominant thirteen"
+
 
 
 fromKindString : String -> Maybe (Note -> Chord)
@@ -206,6 +243,15 @@ fromKindString val =
 
         "augmented major seventh" ->
             Just AugmentedMajorSeventhChord
+
+        "dominant ninth" ->
+            Just DominantNinthChord
+
+        "dominant eleventh" ->
+            Just DominantEleventhChord
+
+        "dominant thirteen" ->
+            Just DominantThirteenThirteen
 
         _ ->
             Nothing
