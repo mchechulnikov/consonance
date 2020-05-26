@@ -38,6 +38,10 @@ type Chord
     | AddSixChord Note
     | SixNineChord Note
     | SevenSixChord Note
+    -- suspended chords
+    | SuspendedSecondChord Note
+    | SuspendedFourthChord Note
+    | JazzSusChord Note
 
 
 toNotes : Chord -> List Note
@@ -148,6 +152,18 @@ toNotes chord =
             [ MajorThird, MinorThird, MajorSecond, AugmentedFourth ]
                 |> getNotes tonic
 
+        SuspendedSecondChord tonic ->
+            [ MajorSecond, PerfectFourth ]
+                |> getNotes tonic
+
+        SuspendedFourthChord tonic ->
+            [ PerfectFourth, MajorSecond ]
+                |> getNotes tonic
+
+        JazzSusChord tonic ->
+            [ PerfectFourth, MajorSecond, MinorThird, MajorThird ]
+                |> getNotes tonic
+
 
 toString : Chord -> String
 toString chord =
@@ -229,6 +245,15 @@ toString chord =
 
         SevenSixChord note ->
             (Note.toString note) ++ "7/9"
+
+        SuspendedSecondChord note ->
+            (Note.toString note) ++ "sus2"
+
+        SuspendedFourthChord note ->
+            (Note.toString note) ++ "sus4"
+
+        JazzSusChord note ->
+            (Note.toString note) ++ "9sus4"
 
 
 toKindString : Chord -> String
@@ -312,6 +337,15 @@ toKindString chord =
         SevenSixChord _ ->
             "seven six"
 
+        SuspendedSecondChord _ ->
+            "suspended second"
+
+        SuspendedFourthChord _ ->
+            "suspended fourth"
+
+        JazzSusChord _ ->
+            "jazz sus"
+
 
 fromKindString : String -> Maybe (Note -> Chord)
 fromKindString val =
@@ -393,6 +427,15 @@ fromKindString val =
 
         "seven six" ->
             Just SevenSixChord
+
+        "suspended second" ->
+            Just SuspendedSecondChord
+
+        "suspended fourth" ->
+            Just SuspendedFourthChord
+
+        "jazz sus" ->
+            Just JazzSusChord
 
         _ ->
             Nothing
