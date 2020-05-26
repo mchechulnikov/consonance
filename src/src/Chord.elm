@@ -32,6 +32,12 @@ type Chord
     | SeventhSharpNinthChord Note
     | SeventhAugmentedEleventhChord Note
     | SeventhDiminishedThirteenChord Note
+    -- added tone chords
+    | AddNineChord Note
+    | AddFourthChord Note
+    | AddSixChord Note
+    | SixNineChord Note
+    | SevenSixChord Note
 
 
 toNotes : Chord -> List Note
@@ -122,6 +128,26 @@ toNotes chord =
             [ MajorThird, MinorThird, MinorThird, MajorThird, MinorThird, MinorThird ]
                 |> getNotes tonic
 
+        AddNineChord tonic ->
+            [ MajorThird, MinorThird, PerfectFifth ]
+                |> getNotes tonic
+
+        AddFourthChord tonic ->
+            [ MajorThird, MinorSecond, MajorSecond ]
+                |> getNotes tonic
+
+        AddSixChord tonic ->
+            [ MajorThird, MinorThird, MajorSecond ]
+                |> getNotes tonic
+
+        SixNineChord tonic ->
+            [ MajorThird, MinorThird, MajorSecond, PerfectFourth ]
+                |> getNotes tonic
+
+        SevenSixChord tonic ->
+            [ MajorThird, MinorThird, MajorSecond, AugmentedFourth ]
+                |> getNotes tonic
+
 
 toString : Chord -> String
 toString chord =
@@ -188,6 +214,21 @@ toString chord =
 
         SeventhDiminishedThirteenChord note ->
             (Note.toString note) ++ "7♭13"
+
+        AddNineChord note ->
+            (Note.toString note) ++ "add9"
+
+        AddFourthChord note ->
+            (Note.toString note) ++ "add11"
+
+        AddSixChord note ->
+            (Note.toString note) ++ "6"
+
+        SixNineChord note ->
+            (Note.toString note) ++ "6/9"
+
+        SevenSixChord note ->
+            (Note.toString note) ++ "7/9"
 
 
 toKindString : Chord -> String
@@ -256,6 +297,21 @@ toKindString chord =
         SeventhDiminishedThirteenChord _ ->
             "seventh diminished thirteen"
 
+        AddNineChord _ ->
+            "add nine"
+
+        AddFourthChord _ ->
+            "add fourth"
+
+        AddSixChord _ ->
+            "add six"
+
+        SixNineChord _ ->
+            "six nine"
+
+        SevenSixChord _ ->
+            "seven six"
+
 
 fromKindString : String -> Maybe (Note -> Chord)
 fromKindString val =
@@ -322,6 +378,21 @@ fromKindString val =
 
         "seventh diminished thirteen" ->
             Just SeventhDiminishedThirteenChord
+
+        "add nine" ->
+            Just AddNineChord
+
+        "add fourth" ->
+            Just AddFourthChord
+
+        "add six" ->
+            Just AddSixChord
+
+        "six nine" ->
+            Just SixNineChord
+
+        "seven six" ->
+            Just SevenSixChord
 
         _ ->
             Nothing
