@@ -6,17 +6,27 @@
     <link rel="stylesheet" type="text/css" href="/reset.css">
     <link rel="stylesheet" type="text/css" href="/main.css">
     <script src="/index.js"></script>
-    <script src="/ports.js"></script>
     <base href="/">
 </head>
 <body>
     <div id="appContainer"></div>
-    <script>
-        window.onload = () => {
-            const app = Elm.Main.init({ node: document.getElementById('appContainer')});
-
-            initPorts(app);
-        };
-    </script>
 </body>
+<script>
+    const app = Elm.Main.init({
+        node: document.getElementById('appContainer')
+    });
+
+    // commented while unused
+
+    // // local storage
+    // app.ports.localStorageGetItem.subscribe(key => {
+    //     const value = localStorage.getItem(key);
+    //
+    //     if (value)
+    //         app.localStorageGetItemResponse.send([key, value])
+    // });
+    // app.ports.localStorageSetItem.subscribe(([key, value]) => {
+    //     localStorage.setItem(key, value);
+    // });
+</script>
 </html>
