@@ -2,4 +2,4 @@
 docker build \
   -t consonance \
   -f ./build/dockerfile \
-  ..
+  .

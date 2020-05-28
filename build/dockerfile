@@ -10,15 +10,18 @@ COPY ./src/src ./src
 COPY ./src/tests ./tests
 
 RUN ./node_modules/.bin/elm-test --compiler ./node_modules/.bin/elm
-RUN ./node_modules/.bin/elm make ./src/Main.elm
+RUN ./node_modules/.bin/elm make ./src/Main.elm --output=index.js
 
 
 
-FROM ngin
+FROM nginx
 
 COPY ./src/server.conf .
-COPY --from=front-build-env /workdir/index.html /usr/share/nginx/html
+COPY --from=build-env /workdir/src/native /usr/share/nginx/html
+COPY --from=build-env /workdir/index.js /usr/share/nginx/html
 
-CMD /bin/sh -c "\
-    envsubst < /server.conf > /etc/nginx/nginx.conf && \
-    nginx -g 'daemon off;'"
+CMD /bin/bash -c "\
+    envsubst < /server.conf > /etc/nginx/nginx.conf \
+    && cat /etc/nginx/nginx.conf \
+    && ls /usr/share/nginx/html \
+    && nginx -g 'daemon off;'"
