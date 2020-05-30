@@ -16,12 +16,6 @@ RUN ./node_modules/.bin/elm make ./src/Main.elm --output=index.js
 
 FROM nginx
 
-COPY ./src/server.conf .
+COPY ./src/server.conf /etc/nginx/nginx.conf
 COPY --from=build-env /workdir/src/native /usr/share/nginx/html
 COPY --from=build-env /workdir/index.js /usr/share/nginx/html
-
-CMD /bin/bash -c "\
-    envsubst < /server.conf > /etc/nginx/nginx.conf \
-    && cat /etc/nginx/nginx.conf \
-    && ls /usr/share/nginx/html \
-    && nginx -g 'daemon off;'"
