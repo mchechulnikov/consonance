@@ -24,3 +24,9 @@ jobs:
         
     - name: Build and push Docker images
       uses: docker/build-push-action@v1.1.0
+      with:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: docker.pkg.github.com
+        repository: chechulnikov/consonance/consonance
+        tag_with_ref: true
