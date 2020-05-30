@@ -29,4 +29,6 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
         repository: chechulnikov/consonance/consonance
+        dockerfile: ./build/dockerfile
+        path: .
         tag_with_ref: true
