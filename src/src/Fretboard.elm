@@ -46,7 +46,7 @@ view model =
             gen model.guitar.fretsNumber []
                 |> List.map (String.fromInt >> text >> singleton)
                 |> List.map (div [ css [ displayFlex, padding (rem 1), width (rem 2) ] ])
-                |> div [ css [ displayFlex ] ]
+                |> div [ css [ displayFlex, color (rgb 128 128 128) ] ]
     in
     div
         []
@@ -54,6 +54,7 @@ view model =
         , model.guitar.layout
             |> List.indexedMap viewGuitarString
             |> div []
+        , fretNumbersRow
         ]
 
 
