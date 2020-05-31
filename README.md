@@ -1,7 +1,8 @@
 # Consonance
 ![Build](https://github.com/chechulnikov/consonance/workflows/Build/badge.svg)
+![CI](https://github.com/chechulnikov/consonance/workflows/CI/badge.svg)
 
-Guitar fretboard assistant
+Guitar fretboard assistant<br/>
 ![scr](./docs/scr.png)
 
 # Roadmap for MVP
