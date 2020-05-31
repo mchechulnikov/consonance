@@ -1,5 +1,0 @@
-name: 'CI'
-description: 'Check integration'
-runs:
-  using: 'docker'
-  image: './build/dockerfile'
