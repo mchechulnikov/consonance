@@ -1,5 +1,6 @@
 # Consonance
 ![Build](https://github.com/chechulnikov/consonance/workflows/Build/badge.svg)
+
 Guitar fretboard assistant
 ![scr](./docs/scr.png)
 
