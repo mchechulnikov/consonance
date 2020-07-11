@@ -49,7 +49,10 @@ view model =
                 |> div [ css [ displayFlex, color (rgb 128 128 128) ] ]
     in
     div
-        []
+        [ css
+            [ fontFamilies [ "JetBrains Mono" ]
+            ]
+        ]
         [ fretNumbersRow
         , model.guitar.layout
             |> List.indexedMap viewGuitarString
