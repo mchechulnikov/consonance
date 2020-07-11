@@ -45,7 +45,7 @@ view model =
             in
             gen model.guitar.fretsNumber []
                 |> List.map (String.fromInt >> text >> singleton)
-                |> List.map (div [ css [ displayFlex, padding (rem 1), width (rem 2) ] ])
+                |> List.map (div [ css [ displayFlex, padding (rem 1), minWidth (rem 2), width (rem 2) ] ])
                 |> div [ css [ displayFlex, color (rgb 128 128 128) ] ]
     in
     div
@@ -97,6 +97,7 @@ viewFretPoint note fretPointState  =
         [ css
             [ displayFlex
             , padding (rem 1)
+            , minWidth (rem 2)
             , width (rem 2)
             , cursor pointer
             , backgroundStyle
