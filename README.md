@@ -3,7 +3,7 @@
 ![CI](https://github.com/chechulnikov/consonance/workflows/CI/badge.svg)
 
 Guitar fretboard assistant<br/>
-![scr](./docs/scr.png)
+![scr](docs/screen.png)
 
 # Roadmap for MVP
 - [x] Simplest fretboard
